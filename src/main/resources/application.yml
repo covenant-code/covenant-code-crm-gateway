@@ -1,0 +1,49 @@
+server:
+  port: ${SERVER_PORT:8080}
+
+spring:
+  application:
+    name: crm-gateway
+  cloud:
+    gateway:
+      globalcors:
+        corsConfigurations:
+          '[/**]':
+            allowedOriginPatterns:
+              - "${CORS_ALLOWED_ORIGIN:*}"
+            allowedMethods:
+              - GET
+              - POST
+              - PUT
+              - PATCH
+              - DELETE
+              - OPTIONS
+            allowedHeaders:
+              - "*"
+            allowCredentials: true
+            maxAge: 3600
+
+# CRM service URL — set via env var CRM_SERVICE_URL.
+# In Docker Swarm (same stack): http://crm-service:8080 (Swarm DNS, no underscore).
+# In Docker Swarm (cross-stack): http://crm_crm-service:8080 — NOT used by default (Java 21 rejects _ in hostname).
+# Locally (dev profile): overridden in application-dev.yml → http://localhost:8082
+crm:
+  service:
+    url: http://crm-service:8080
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: health,info,prometheus
+  endpoint:
+    health:
+      show-details: when_authorized
+  health:
+    circuitbreakers:
+      enabled: true
+
+logging:
+  level:
+    org.springframework.cloud.gateway: INFO
+    reactor.netty: INFO

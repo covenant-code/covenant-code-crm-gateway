@@ -1,0 +1,14 @@
+# CRM service running locally via its docker-compose on port 8082
+crm:
+  service:
+    url: http://localhost:8082
+
+management:
+  endpoint:
+    health:
+      show-details: always
+
+logging:
+  level:
+    org.springframework.cloud.gateway: DEBUG
+    reactor.netty.http.client: DEBUG

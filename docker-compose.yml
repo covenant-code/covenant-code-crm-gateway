@@ -1,0 +1,20 @@
+services:
+  crm-gateway:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    container_name: crm-gateway-dev
+    environment:
+      SPRING_PROFILES_ACTIVE: dev
+      SERVER_PORT: "8080"
+      # CRM service exposed on host port 8082 by its own docker-compose
+      CRM_SERVICE_URL: http://host.docker.internal:8082
+      CORS_ALLOWED_ORIGIN: "*"
+    ports:
+      - "8080:8080"
+    healthcheck:
+      test: ["CMD-SHELL", "wget -qO- http://localhost:8080/actuator/health || exit 1"]
+      interval: 15s
+      timeout: 5s
+      retries: 3
+      start_period: 30s

@@ -1,0 +1,18 @@
+# In Docker Swarm same-stack deployment, crm-service resolves by short name via Swarm DNS
+crm:
+  service:
+    url: http://crm-service:8080
+
+management:
+  endpoint:
+    health:
+      show-details: never
+  endpoints:
+    web:
+      exposure:
+        include: health,prometheus
+
+logging:
+  level:
+    org.springframework.cloud.gateway: WARN
+    reactor.netty: WARN
